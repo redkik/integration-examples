@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  typescript:
+    build: ./typescript
+    environment:
+      - REDKIK_HOST
+      - CLIENT_ID
+      - CLIENT_SECRET
+    volumes:
+      - ./typescript/:/app/
+  javascript:
+    build: ./javascript
+    environment:
+      - REDKIK_HOST
+      - CLIENT_ID
+      - CLIENT_SECRET
+    volumes:
+      - ./javascript/:/app/
+  python:
+    build: ./python
+    environment:
+      - REDKIK_HOST
+      - CLIENT_ID
+      - CLIENT_SECRET
+    volumes:
+      - ./python/:/app/
