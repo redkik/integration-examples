@@ -9,7 +9,7 @@ import {
 require("dotenv").config({ path: "../.env" });
 const { REDKIK_HOST, CLIENT_ID, CLIENT_SECRET } = process.env;
 
-async function getCredentials() {
+async function apiCalls() {
   try {
     // Access Token
 
@@ -28,8 +28,6 @@ async function getCredentials() {
       }
     );
 
-    console.log("Access Token:", data);
-
     // Setup
 
     const { data: setup } = await axios.get<SetupResponse>(
@@ -42,8 +40,6 @@ async function getCredentials() {
       }
     );
 
-    console.log("Setup:", setup);
-
     // Quote
 
     const { data: quote } = await axios.post<QuoteResponse>(
@@ -51,43 +47,50 @@ async function getCredentials() {
       {
         isPublic: false,
         commodityId: setup.commodities[0].id,
-        commodityDescription: "test",
-        insuredValue: 50,
-        trackingCode: "test",
+        commodityDescription:  "test",
+        insuredValue: 1000,
         originFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
-        originStreet: "test",
-        originState: "test",
-        originPostcode: "80100",
-        originCity: "Joensuu",
-        originCountry: setup.countries[0].id,
         destinationFormatted: "Länsikatu 15, FI-70820 KUOPIO, FINLAND",
-        destinationStreet: "Länsikatu 15",
-        destinationState: "test",
-        destinationPostcode: "70820",
-        destinationCity: "Kuopio",
-        destinationCountry: setup.countries[0].id,
-        startDate: "2022-09-22T03:00:00.000+03:00",
-        endDate: "2022-09-23T03:00:00.000+03:00",
+        startDate:  "2022-10-23T03:00:00.000+03:00",
+        endDate:  "2022-10-24T03:00:00.000+03:00",
         transportType: 1,
-        courierId: setup.couriers[0].id,
-        bookingFee: 50,
-        bookingFeeType: 1,
         customerId: setup.customers[0].id,
-        customerType: 1,
-        customerOrganization: "test",
-        customerTaxId: "test",
-        customerForename: "test",
-        customerSurname: "test",
-        customerEmail: "test",
-        customerPhone: "test",
-        customerFormatted: "test",
-        customerStreet: "test",
-        customerCity: "test",
-        customerState: "test",
-        customerPostcode: "test",
-        customerCountry: setup.countries[0].id,
-        customerReference: "test",
-        captcha: "test",
+        // Optional parameters
+        // trackingCode:  "",
+        // originStreet: "",
+        // originState: "",
+        // originPostcode: "",
+        // originCity: "",
+        // originCountry: "",
+        // destinationStreet: "",
+        // destinationState: "",
+        // destinationPostcode: "",
+        // destinationCity: "",
+        // destinationCountry: "",
+        // courierId:  setup.couriers[0].id,
+        // exitPortId: "",
+        // entryPortId: "",
+        // vesselId: "",
+        // exitPort: "",
+        // entryPort: "",
+        // vessel: "",
+        // bookingFee: 1,
+        // bookingFeeType: 1,
+        // customerType: 1,
+        // customerOrganization: "",
+        // customerTaxId: "",
+        // customerForename: "",
+        // customerSurname: "",
+        // customerEmail: "",
+        // customerPhone: "",
+        // customerFormatted: "",
+        // customerStreet: "",
+        // customerCity: "",
+        // customerState: "",
+        // customerPostcode: "",
+        // customerCountry: "",
+        // customerReference: "",
+        // captcha: "",
       },
       {
         headers: {
@@ -97,8 +100,6 @@ async function getCredentials() {
         },
       }
     );
-
-    console.log("Quote:", quote);
 
     // Purchase
 
@@ -116,11 +117,9 @@ async function getCredentials() {
       }
     );
 
-    console.log("Purchase:", purchase);
-
     // Cancel
 
-    const { data: cancel } = await axios.patch<boolean>(
+    await axios.patch<boolean>(
       `${REDKIK_HOST}/api/v2/quote/bookings/${purchase.id}/cancel`,
       {},
       {
@@ -131,8 +130,6 @@ async function getCredentials() {
         },
       }
     );
-
-    console.log("Cancel:", cancel);
 
     return setup;
   } catch (error) {
@@ -147,10 +144,4 @@ async function getCredentials() {
   }
 }
 
-getCredentials();
-
-console.log("When I grow up, I will be TypeScript integration example", {
-  REDKIK_HOST,
-  CLIENT_ID,
-  CLIENT_SECRET,
-});
+apiCalls();
