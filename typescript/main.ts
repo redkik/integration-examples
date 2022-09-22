@@ -11,8 +11,7 @@ const { REDKIK_HOST, CLIENT_ID, CLIENT_SECRET } = process.env;
 
 async function apiCalls() {
   try {
-    // Access Token
-    // Create API token and use id and secret from response
+    // Create an Access Token. You will need this to make any of the other API calls
 
     const { data } = await axios.post<AccessToken>(
       `${REDKIK_HOST}/api/v2/user/oauth/token`,
