@@ -12,6 +12,7 @@ const { REDKIK_HOST, CLIENT_ID, CLIENT_SECRET } = process.env;
 async function apiCalls() {
   try {
     // Access Token
+    // Create API token and use id and secret from response
 
     const { data } = await axios.post<AccessToken>(
       `${REDKIK_HOST}/api/v2/user/oauth/token`,
@@ -29,6 +30,7 @@ async function apiCalls() {
     );
 
     // Setup
+    // Get all the necessary information to make a quote
 
     const { data: setup } = await axios.get<SetupResponse>(
       `${REDKIK_HOST}/api/v2/quote/quotes/setup`,
@@ -41,6 +43,8 @@ async function apiCalls() {
     );
 
     // Quote
+    // These properties are mandatory. Optional properties can be found in QuoteResponse interface
+    // Make sure that used policy allows the quote
 
     const { data: quote } = await axios.post<QuoteResponse>(
       `${REDKIK_HOST}/api/v2/quote/quotes/quote`,
@@ -66,6 +70,7 @@ async function apiCalls() {
     );
 
     // Purchase
+    // Purchase can only be made with a valid quote offer
 
     const { data: purchase } = await axios.post<Booking>(
       `${REDKIK_HOST}/api/v2/quote/bookings/purchase`,
@@ -82,6 +87,7 @@ async function apiCalls() {
     );
 
     // Cancel
+    // Booking cannot be cancelled if it's under way
 
     await axios.patch<boolean>(
       `${REDKIK_HOST}/api/v2/quote/bookings/${purchase.id}/cancel`,
@@ -95,7 +101,6 @@ async function apiCalls() {
       }
     );
 
-    return setup;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log("error message: ", error.message);
