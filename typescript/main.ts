@@ -50,12 +50,11 @@ async function apiCalls() {
       {
         isPublic: false,
         commodityId: setup.commodities[0].id,
-        commodityDescription:  "test",
         insuredValue: 1000,
         originFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
         destinationFormatted: "Länsikatu 15, FI-70820 KUOPIO, FINLAND",
-        startDate:  "2022-10-23T03:00:00.000+03:00",
-        endDate:  "2022-10-24T03:00:00.000+03:00",
+        startDate: "2022-10-23T03:00:00.000+03:00",
+        endDate: "2022-10-24T03:00:00.000+03:00",
         transportType: 1,
         customerId: setup.customers[0].id,
       },
@@ -99,7 +98,6 @@ async function apiCalls() {
         },
       }
     );
-
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log("error message: ", error.message);
