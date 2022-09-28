@@ -1,0 +1,42 @@
+{
+  "name": "redkik-ff-demo",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.2",
+    "cities.json": "^1.1.9",
+    "formik": "^2.2.9",
+    "geolib": "^3.3.3",
+    "prettier": "^2.7.1",
+    "react": "^18.1.0",
+    "react-awesome-slider": "^4.1.0",
+    "react-dom": "^18.1.0",
+    "react-redux": "^8.0.2",
+    "react-scripts": "5.0.1",
+    "styled-components": "^5.3.5"
+  },
+  "scripts": {
+    "start": "PORT=8080 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
