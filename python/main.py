@@ -40,8 +40,8 @@ async def main():
             'isPublic': 'false',
             'commodityId': response['commodities'][0]['id'],
             'insuredValue': 100,
-            'originFormatted': 'Länsikatu 15, FI-80110 JOENSUU, FINLAND',
-            'destinationFormatted': 'Länsikatu 15, FI-70820 KUOPIO, FINLAND',
+            'originFormatted': 'Kirkkokatu 1, FI-00170 HELSINKI, FINLAND',
+            'destinationFormatted': 'Mannerheiminaukio 1, FI-00100 HELSINKI, FINLAND',
             'startDate': '2022-10-23T03:00:00.000+03:00',
             'endDate': '2022-10-24T03:00:00.000+03:00',
             'transportType': 1,
@@ -106,13 +106,11 @@ async def main():
     
         async with session.post(url = REDKIK_HOST + '/api/v2/quote/bookings/purchase', data = {'offerId': response[0]['id']}, headers = header) as purchaseResponse:
             response = await purchaseResponse.json()
-            print(response['id'])
 
         # Cancel
         # Booking cannot be cancelled if it's under way
 
         async with session.patch(url = REDKIK_HOST + '/api/v2/quote/bookings/' + response['id'] + '/cancel', headers = header) as cancelResponse:
             response = await cancelResponse.json()
-            print(response)
 
 asyncio.run(main())
