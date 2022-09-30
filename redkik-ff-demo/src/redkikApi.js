@@ -2,11 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //This should not be here or anywhere in UI
 const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjAyNzk5NzYsIm5iZiI6MTY2MDI3OTM2NiwiaWF0IjoxNjYwMjc5MzY2LCJqdGkiOiJmM2I5NjE3NS1iNjMwLTRiN2ItYmI3Zi1lMzhiZjFmM2M5NTUiLCJjaWQiOiI3ZGU2Mzk3NC0yNDQyLTQzMGItYTQ3ZC0zMGU0Y2M3NTUzMWUifQ.tlsl0tqePFDH7KdsOUwXKqHbj5Og7HVgKx_Q2X2DToo";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjQ2MTE0MTMsIm5iZiI6MTY2NDUyNTAwMywiaWF0IjoxNjY0NTI1MDAzLCJqdGkiOiIzODYzZmExZS0xNGRiLTRhZTEtYjRlNy05MGU2Y2M3ZWNjMTkiLCJjaWQiOiIwNTQ0OThjMy02YzhjLTQ0MDQtOWY4My1mNmJmZWZkYzhjMGEifQ.R-Nu-vMx0JqyydHU0Ug256glZefxixB61JIdAzSk5sY";
 
 export const redkikQuoteApi = createApi({
   reducerPath: "redkikQuoteApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/v1/quote" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/v2/quote" }),
   endpoints: (builder) => ({
     getOffer: builder.mutation({
       query: (data) => ({
@@ -15,16 +15,16 @@ export const redkikQuoteApi = createApi({
         body: data,
         headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
       }),
-      transformResponse: (response) => response.result[0],
+      transformResponse: (response) => response,
     }),
     purchaseOffer: builder.mutation({
       query: (offerId) => ({
-        url: `/quotes/purchase`,
+        url: `/bookings/purchase`,
         method: "POST",
         body: { offerId },
         headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
       }),
-      transformResponse: (response) => response.result[0],
+      transformResponse: (response) => response,
     }),
   }),
 });

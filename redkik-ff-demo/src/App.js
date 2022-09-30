@@ -41,6 +41,7 @@ function buildRequest(data) {
     ...data,
     isPublic: false,
     transportType: "1",
+    customerType: "1",
     originFormatted: joinAddress("origin", data),
     destinationFormatted: joinAddress("destination", data),
     customerFormatted: joinAddress("customer", data),
@@ -48,16 +49,16 @@ function buildRequest(data) {
 }
 
 function renderOffer(offer) {
-  return !offer.accepted ? (
+  return !offer.data[0].accepted ? (
     <div>
       We are unable to insure the shipment because:{" "}
-      {offer.amendments.join(", ")}
+      {offer.data[0].amendments.join(", ")}
     </div>
   ) : (
     <div>
       {makeCheckbox(
         "purchaseInsurance",
-        `Add insurance with price of ${offer.premium}€`
+        `Add insurance with price of €${offer.data[0].totalCost}`
       )}
     </div>
   );
@@ -142,7 +143,7 @@ function App() {
             setTimeout(() => {
               console.log(values);
               if (values.purchaseInsurance) {
-                purchaseOffer(getOfferState.data?.id);
+                purchaseOffer(getOfferState.data[0].id);
               }
               setSubmitting(false);
             }, 400);
@@ -207,16 +208,16 @@ function App() {
                       <u>{joinAddress("destination", values, true)}</u>
                     </p>
                     <H>Insurance:</H>
-                    <p>
+                    <div>
                       {getOfferState.isUninitialized ||
                       getOfferState.isLoading ? (
                         <div>Loading...</div>
                       ) : getOfferState.isSuccess ? (
-                        renderOffer(getOfferState.data)
+                        renderOffer(getOfferState)
                       ) : (
-                        <div>{getOfferState.error.error}</div>
+                        <div>{getOfferState.error.data.message}</div>
                       )}
-                    </p>
+                    </div>
                     {createNavigation(page, setPage, isSubmitting)}
                   </Page>
                 </>
