@@ -14,10 +14,10 @@ Navigate to the python folder:
 cd python
 ```
 
-Install packages:
+Make sure python is installed and install required packages:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 Run the examples:
