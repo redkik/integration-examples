@@ -164,7 +164,7 @@ function App() {
                     <PageContents>
                       <H>From Address</H>
                       {makeSelectField("originCountry", "FROM", countries)}
-                      {makeField("originStreet", "Address")}
+                      {makeField("originStreet", "Street Address")}
                       {makeField("originPostcode", "Postal code")}
                       {makeField("originCity", "City")}
                       {makeSelectField(
@@ -177,7 +177,7 @@ function App() {
 
                       <H>To Address</H>
                       {makeSelectField("destinationCountry", "TO", countries)}
-                      {makeField("destinationStreet", "Address")}
+                      {makeField("destinationStreet", "Street Address")}
                       {makeField("destinationPostcode", "Postal code")}
                       {makeField("destinationCity", "City")}
                       {makeSelectField(
@@ -212,7 +212,7 @@ function App() {
                       <H>Contact Information</H>
                       {makeField("customerOrganization", "Company name")}
                       {makeSelectField("customerCountry", "Country", countries)}
-                      {makeField("customerStreet", "Address")}
+                      {makeField("customerStreet", "Street Address")}
                       {makeField("customerPostcode", "Postal code")}
                       {makeField("customerCity", "City")}
                       {makeSelectField(
