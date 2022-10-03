@@ -14,12 +14,13 @@ import {
   makeField,
   makeCheckbox,
   createNavigation,
-  PageTitle,
+  PageContents,
   H,
 } from "./styledComponents";
 import logo from "./logo.svg";
 
-import countries, { getDistance } from "./data/countries";
+import countries from "./data/countries";
+import states from "./data/states";
 import demoData, { addDays } from "./data/demoData";
 import commodityTypes from "./data/commodityTypes";
 
@@ -28,7 +29,7 @@ function joinAddress(direction, data, addPostcode = false) {
     data[`${direction}Street`],
     addPostcode ? data[`${direction}PostalCode`] : undefined,
     data[`${direction}City`],
-    data[`${direction}State`],
+    states.find((state) => state.value === data[`${direction}State`])?.title,
     countries.find((country) => country.value === data[`${direction}Country`])
       ?.title,
   ]
@@ -49,16 +50,18 @@ function buildRequest(data) {
 }
 
 function renderOffer(offer) {
-  return !offer.data[0].accepted ? (
+  return !offer.accepted ? (
     <div>
       We are unable to insure the shipment because:{" "}
-      {offer.data[0].amendments.join(", ")}
+      {offer.amendments.join(", ")}
     </div>
   ) : (
     <div>
       {makeCheckbox(
         "purchaseInsurance",
-        `Add insurance with price of €${offer.data[0].totalCost}`
+        `Add insurance with price of €${(
+          offer.totalCost / offer.currencyDivisionModifier
+        ).toFixed(offer.currencyDecimalPlaces)}`
       )}
     </div>
   );
@@ -158,67 +161,93 @@ function App() {
               >
                 <>
                   <Page>
-                    <H>From Address</H>
-                    {makeSelectField("originCountry", "FROM", countries)}
-                    {makeField("originStreet", "Address")}
-                    {makeField("originPostcode", "Postal code")}
-                    {makeField("originCity", "City")}
-                    {makeField("originState", "State")}
-
-                    <H>To Address</H>
-                    {makeSelectField("destinationCountry", "TO", countries)}
-                    {makeField("destinationStreet", "Address")}
-                    {makeField("destinationPostcode", "Postal code")}
-                    {makeField("destinationCity", "City")}
-                    {makeField("destinationState", "State")}
-                    {createNavigation(page, setPage, isSubmitting)}
-                  </Page>
-                </>
-                <>
-                  <Page>
-                    <H>Shipping Details</H>
-                    {makeField("startDate", "Shipment date", "date")}
-                    {makeField("insuredValue", "Value")}
-                    {makeSelectField(
-                      "commodityId",
-                      "Commodity type",
-                      commodityTypes
-                    )}
-                    {createNavigation(page, setPage, isSubmitting)}
-                  </Page>
-                </>
-                <>
-                  <Page>
-                    <H>Contact Information</H>
-                    {makeField("customerOrganization", "Company name")}
-                    {makeSelectField("customerCountry", "Country", countries)}
-                    {makeField("customerStreet", "Address")}
-                    {makeField("customerPostcode", "Postal code")}
-                    {makeField("customerCity", "City")}
-                    {makeField("customerState", "State")}
-                    {makeField("customerEmail", "Email")}
-                    {createNavigation(page, setPage, isSubmitting)}
-                  </Page>
-                </>
-                <>
-                  <Page>
-                    <H>Shipment:</H>
-                    <p>
-                      From <u>{joinAddress("origin", values, true)}</u> to{" "}
-                      <u>{joinAddress("destination", values, true)}</u>
-                    </p>
-                    <H>Insurance:</H>
-                    <div>
-                      {getOfferState.isUninitialized ||
-                      getOfferState.isLoading ? (
-                        <div>Loading...</div>
-                      ) : getOfferState.isSuccess ? (
-                        renderOffer(getOfferState)
-                      ) : (
-                        <div>{getOfferState.error.data.message}</div>
+                    <PageContents>
+                      <H>From Address</H>
+                      {makeSelectField("originCountry", "FROM", countries)}
+                      {makeField("originStreet", "Address")}
+                      {makeField("originPostcode", "Postal code")}
+                      {makeField("originCity", "City")}
+                      {makeSelectField(
+                        "originState",
+                        "State",
+                        states.filter(
+                          (s) => s.countryId === values.originCountry
+                        )
                       )}
-                    </div>
-                    {createNavigation(page, setPage, isSubmitting)}
+
+                      <H>To Address</H>
+                      {makeSelectField("destinationCountry", "TO", countries)}
+                      {makeField("destinationStreet", "Address")}
+                      {makeField("destinationPostcode", "Postal code")}
+                      {makeField("destinationCity", "City")}
+                      {makeSelectField(
+                        "destinationState",
+                        "State",
+                        states.filter(
+                          (s) => s.countryId === values.destinationCountry
+                        )
+                      )}
+                      {createNavigation(page, setPage, isSubmitting)}
+                    </PageContents>
+                  </Page>
+                </>
+                <>
+                  <Page>
+                    <PageContents>
+                      <H>Shipping Details</H>
+                      {makeField("startDate", "Shipment date", "date")}
+                      {makeField("insuredValue", "Value")}
+                      {makeSelectField(
+                        "commodityId",
+                        "Commodity type",
+                        commodityTypes
+                      )}
+                      {createNavigation(page, setPage, isSubmitting)}
+                    </PageContents>
+                  </Page>
+                </>
+                <>
+                  <Page>
+                    <PageContents>
+                      <H>Contact Information</H>
+                      {makeField("customerOrganization", "Company name")}
+                      {makeSelectField("customerCountry", "Country", countries)}
+                      {makeField("customerStreet", "Address")}
+                      {makeField("customerPostcode", "Postal code")}
+                      {makeField("customerCity", "City")}
+                      {makeSelectField(
+                        "customerState",
+                        "State",
+                        states.filter(
+                          (s) => s.countryId === values.customerCountry
+                        )
+                      )}
+                      {makeField("customerEmail", "Email")}
+                      {createNavigation(page, setPage, isSubmitting)}
+                    </PageContents>
+                  </Page>
+                </>
+                <>
+                  <Page>
+                    <PageContents>
+                      <H>Shipment:</H>
+                      <p>
+                        From <u>{joinAddress("origin", values, true)}</u> to{" "}
+                        <u>{joinAddress("destination", values, true)}</u>
+                      </p>
+                      <H>Insurance:</H>
+                      <div>
+                        {getOfferState.isUninitialized ||
+                        getOfferState.isLoading ? (
+                          <div>Loading...</div>
+                        ) : getOfferState.isSuccess ? (
+                          renderOffer(getOfferState.data[0])
+                        ) : (
+                          <div>{getOfferState.error.data.message}</div>
+                        )}
+                      </div>
+                      {createNavigation(page, setPage, isSubmitting)}
+                    </PageContents>
                   </Page>
                 </>
               </AwesomeSlider>

@@ -67,6 +67,18 @@ export const PageTitle = styled.div`
   font-weight: bold;
 `;
 
+export const PageContents = styled.div`
+  height: calc(100vh - 5rem - 54px - 8rem - 60px);
+  overflow-y: scroll;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+`;
+
 export const PageNavigation = styled.div`
   position: absolute;
   bottom: 1rem;
@@ -75,14 +87,13 @@ export const PageNavigation = styled.div`
   justify-content: space-between;
 `;
 export const PageNavigationButton = styled.button`
-    border: none;
-    padding: 0.8rem 2rem;
-    /* border-radius: 0.5rem; */
-    color: white;
-    margin-bottom: 2rem;
-    background-color: #0c8bc1;
-    font-size: 1.2rem;
-}
+  border: none;
+  padding: 0.8rem 2rem;
+  /* border-radius: 0.5rem; */
+  color: white;
+  margin-bottom: 2rem;
+  background-color: #0c8bc1;
+  font-size: 1.2rem;
 `;
 export const PageSubmitButton = styled(PageNavigationButton)`
   background-color: green;

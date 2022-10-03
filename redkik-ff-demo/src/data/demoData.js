@@ -5,18 +5,16 @@ export function addDays(date, numberOfDaysToAdd) {
 
 const demoData = [
   {
-    originCountry: "eecc86cd-d3fc-4f23-b3de-e30a04ad33d6",
+    originCountry: "FI",
     originStreet: "Länsikatu 15",
     originPostcode: "80110",
     originCity: "Joensuu",
-    // originState: "Pohjois-Karjala",
-    originState: "14f7f3b8-7479-4226-9543-d08bd4003a47",
-    destinationCountry: "eecc86cd-d3fc-4f23-b3de-e30a04ad33d6",
-    destinationStreet: "Länsikatu 15",
-    destinationPostcode: "70820",
-    destinationCity: "Kuopio",
-    // destinationState: "MD",
-    destinationState: "8ad84e18-8309-4830-85eb-b89e74f0362c",
+    originState: "14f7f3b8-7479-4226-9543-d08bd4003a47", //TODO: Update when state id changed
+    destinationCountry: "FI",
+    destinationStreet: "Mannerheimintie 3",
+    destinationPostcode: "00100",
+    destinationCity: "Helsinki",
+    destinationState: "d4b00618-8cc2-4e50-8234-eb5a64d6db73", //TODO: Update when state id changed
   },
   {
     startDate: addDays(new Date(), 7).toISOString().slice(0, 10),
@@ -24,14 +22,13 @@ const demoData = [
     insuredValue: 1000,
   },
   {
-    customerEmail: "anni.monttinen@nolwenture.com", //CHANGE TO PRESENTATION ACCOUNT
+    customerEmail: "customer@example.com", //CHANGE TO PRESENTATION ACCOUNT
     customerOrganization: "Redkik",
     customerStreet: "Länsikatu 15",
     customerCity: "Joensuu",
-    //customerState: "Pohjois-Karjala",
-    customerState: "14f7f3b8-7479-4226-9543-d08bd4003a47",
+    customerState: "14f7f3b8-7479-4226-9543-d08bd4003a47", //TODO: Update when state id changed
     customerPostcode: "80110",
-    customerCountry: "eecc86cd-d3fc-4f23-b3de-e30a04ad33d6",
+    customerCountry: "FI",
   },
 ];
 export default demoData;

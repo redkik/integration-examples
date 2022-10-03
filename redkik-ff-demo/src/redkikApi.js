@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //This should not be here or anywhere in UI
 const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjQ2MTE0MTMsIm5iZiI6MTY2NDUyNTAwMywiaWF0IjoxNjY0NTI1MDAzLCJqdGkiOiIzODYzZmExZS0xNGRiLTRhZTEtYjRlNy05MGU2Y2M3ZWNjMTkiLCJjaWQiOiIwNTQ0OThjMy02YzhjLTQ0MDQtOWY4My1mNmJmZWZkYzhjMGEifQ.R-Nu-vMx0JqyydHU0Ug256glZefxixB61JIdAzSk5sY";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjQ4NzY3MDMsIm5iZiI6MTY2NDc5MDI5MywiaWF0IjoxNjY0NzkwMjkzLCJqdGkiOiJmOTFkMjY3NS1kMTE2LTQ2YWUtODUyYi01ZmUwM2ExNTQwNjYiLCJjaWQiOiIwNTQ0OThjMy02YzhjLTQ0MDQtOWY4My1mNmJmZWZkYzhjMGEifQ.IZggtaZUGKTzK0CHIerQUKxgSlPtipLQw04rieGBViE";
 
 export const redkikQuoteApi = createApi({
   reducerPath: "redkikQuoteApi",
