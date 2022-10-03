@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Preparations
+
+To be able to successfully call the API, you will need an Access Token. You can get it by following the README instructions in one of the other examples. One of the example API calls creates an Access Token, which you can, for example, log to the console and then copy and paste to redkikApi.js to replace the example token there.
+
+Before you can start the app, you need to run `npm install` to get the required packages.
+
 ## Available Scripts
 
 In the project directory, you can run:

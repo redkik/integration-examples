@@ -8,7 +8,7 @@ To be able to call the API, you will need a `CLIENT_ID` and a `CLIENT_SECRET`, w
 
 Once you have the `CLIENT_ID` and the `CLIENT_SECRET`, create an .env file to the root of the project based on the .envtemplate.
 
-Navigate to the language folder of your choice (for example the typescript folder):
+Navigate to the typescript folder:
 
 ```bash
 cd typescript
