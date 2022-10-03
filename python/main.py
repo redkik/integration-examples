@@ -28,7 +28,6 @@ async def main():
         # Setup
         # Get all the necessary information to make a quote
 
-    
         async with session.get(url = REDKIK_HOST + '/api/v2/quote/quotes/setup', headers = header) as setupResponse:
             response = await setupResponse.json()
 
@@ -103,7 +102,6 @@ async def main():
         # Purchase
         # Purchase can only be made with a valid quote offer
 
-    
         async with session.post(url = REDKIK_HOST + '/api/v2/quote/bookings/purchase', data = {'offerId': response[0]['id']}, headers = header) as purchaseResponse:
             response = await purchaseResponse.json()
 
