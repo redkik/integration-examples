@@ -4,6 +4,8 @@ services:
     build: ./redkik-embedded-example-frontend
     ports:
       - 8080:8080
+    volumes:
+      - ./redkik-embedded-example-frontend/:/app/
     depends_on:
       - redkik-embedded-example-backend
   redkik-embedded-example-backend:
@@ -12,7 +14,7 @@ services:
       - REDKIK_HOST
       - CLIENT_ID
       - CLIENT_SECRET
+    ports:
+      - 3333:3000
     volumes:
       - ./redkik-embedded-example-backend/:/app/
-    ports:
-      - 4000:4000
