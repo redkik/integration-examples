@@ -9,12 +9,12 @@ const demoData = [
     originStreet: "Länsikatu 15",
     originPostcode: "80110",
     originCity: "Joensuu",
-    originState: "14f7f3b8-7479-4226-9543-d08bd4003a47", //TODO: Update when state id changed
+    originState: "FI_13",
     destinationCountry: "FI",
     destinationStreet: "Mannerheimintie 3",
     destinationPostcode: "00100",
     destinationCity: "Helsinki",
-    destinationState: "d4b00618-8cc2-4e50-8234-eb5a64d6db73", //TODO: Update when state id changed
+    destinationState: "FI_18",
   },
   {
     startDate: addDays(new Date(), 7).toISOString().slice(0, 10),
@@ -26,7 +26,7 @@ const demoData = [
     customerOrganization: "Redkik",
     customerStreet: "Länsikatu 15",
     customerCity: "Joensuu",
-    customerState: "14f7f3b8-7479-4226-9543-d08bd4003a47", //TODO: Update when state id changed
+    customerState: "FI_13",
     customerPostcode: "80110",
     customerCountry: "FI",
   },
