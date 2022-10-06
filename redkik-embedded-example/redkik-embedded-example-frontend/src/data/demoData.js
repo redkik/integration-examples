@@ -22,7 +22,7 @@ const demoData = [
     insuredValue: 1000,
   },
   {
-    customerEmail: "customer@example.com", //CHANGE TO PRESENTATION ACCOUNT
+    customerEmail: "customer@example.com",
     customerOrganization: "Redkik",
     customerStreet: "Länsikatu 15",
     customerCity: "Joensuu",

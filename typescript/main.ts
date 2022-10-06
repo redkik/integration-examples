@@ -27,6 +27,7 @@ async function apiCalls() {
         },
       }
     );
+    console.log("token", data.access_token);
 
     // Setup
     // Get all the necessary information to make a quote
@@ -66,6 +67,9 @@ async function apiCalls() {
         },
       }
     );
+
+    console.log("commodity", setup.commodities[0].id);
+    console.log("quote", quote);
 
     // Purchase
     // Purchase can only be made with a valid quote offer

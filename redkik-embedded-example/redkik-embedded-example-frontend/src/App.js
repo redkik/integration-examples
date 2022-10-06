@@ -115,6 +115,9 @@ function App() {
       );
     }
   }, [page, formRef, getOffer]);
+  const test = fetch("/test")
+    .then((response) => response.json())
+    .then((data) => console.log(data));
 
   return (
     <>
