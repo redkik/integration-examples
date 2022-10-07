@@ -116,21 +116,22 @@ export function makeField(name, label, type = "text") {
     </FieldWrapper>
   );
 }
-export function makeSelectField(name, label, options) {
+export function makeSelectField(name, label, data = []) {
+  const options = [...data];
   return (
     <FieldWrapper>
       <Label htmlFor={name}>{label}</Label>
       <Field name={name} as="select">
         <option disabled value=""></option>
         {options
-          .sort((a, b) => a.title.localeCompare(b.title))
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map((option) => (
             <option
-              key={option.value}
-              value={option.value}
+              key={option.id}
+              value={option.id}
               disabled={option.disabled}
             >
-              {option.title}
+              {option.name}
             </option>
           ))}
       </Field>

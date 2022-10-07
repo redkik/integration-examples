@@ -3,7 +3,12 @@ import { Formik, Form } from "formik";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
 
-import { useGetOfferMutation, usePurchaseOfferMutation } from "./redkikApi";
+import {
+  useGetOfferMutation,
+  usePurchaseOfferMutation,
+  useSetupMutation,
+  useGetStatesMutation,
+} from "./redkikApi";
 import {
   Header,
   Logo,
@@ -18,34 +23,32 @@ import {
   H,
 } from "./styledComponents";
 import logo from "./logo.svg";
-
-import countries from "./data/countries";
-import states from "./data/states";
 import demoData, { addDays } from "./data/demoData";
-import commodityTypes from "./data/commodityTypes";
+import { AddressField } from "./components/AddressField";
 
-function joinAddress(direction, data, addPostcode = false) {
+function joinAddress(direction, data, addPostcode = false, setupState, states) {
   return [
     data[`${direction}Street`],
     addPostcode ? data[`${direction}PostalCode`] : undefined,
     data[`${direction}City`],
-    states.find((state) => state.value === data[`${direction}State`])?.title,
-    countries.find((country) => country.value === data[`${direction}Country`])
-      ?.title,
+    states?.find((state) => state.value === data[`${direction}State`])?.title,
+    setupState?.data?.countries.find(
+      (country) => country.value === data[`${direction}Country`]
+    )?.title,
   ]
     .filter((x) => x)
     .join(", ");
 }
 
-function buildRequest(data) {
+function buildRequest(data, setupState, states) {
   return {
     ...data,
     isPublic: false,
     transportType: "1",
     customerType: "1",
-    originFormatted: joinAddress("origin", data),
-    destinationFormatted: joinAddress("destination", data),
-    customerFormatted: joinAddress("customer", data),
+    originFormatted: joinAddress("origin", data, setupState, states),
+    destinationFormatted: joinAddress("destination", data, setupState, states),
+    customerFormatted: joinAddress("customer", data, setupState, states),
   };
 }
 
@@ -71,6 +74,8 @@ function App() {
   const formRef = useRef();
   const [getOffer, getOfferState] = useGetOfferMutation();
   const [purchaseOffer, purchaseOfferState] = usePurchaseOfferMutation();
+  const [setup, setupState] = useSetupMutation();
+  const [getStates, getStatesState] = useGetStatesMutation();
   const [page, setPage] = useState(0);
   const [sampleData, setSampleData] = useState({
     originStreet: "",
@@ -108,13 +113,21 @@ function App() {
       );
       setFakeShippingPrice(distance * 0.01);
       getOffer(
-        buildRequest({
-          ...formRef.current.values,
-          endDate: fakeEndDate.toISOString().slice(0, 10),
-        })
+        buildRequest(
+          {
+            ...formRef.current.values,
+            endDate: fakeEndDate.toISOString().slice(0, 10),
+          },
+          setupState,
+          getStatesState.data
+        )
       );
     }
-  }, [page, formRef, getOffer]);
+  }, [page, formRef, getOffer, setupState, getStatesState.data]);
+
+  useEffect(() => {
+    setup();
+  }, [setup]);
 
   return (
     <>
@@ -131,17 +144,6 @@ function App() {
           innerRef={formRef}
           initialValues={sampleData}
           enableReinitialize
-          //  validate={values => {
-          //    const errors = {};
-          //    if (!values.email) {
-          //      errors.email = 'Required';
-          //    } else if (
-          //      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          //    ) {
-          //      errors.email = 'Invalid email address';
-          //    }
-          //    return errors;
-          //  }}
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
               console.log(values);
@@ -163,30 +165,15 @@ function App() {
                   <Page>
                     <PageContents>
                       <H>From Address</H>
-                      {makeSelectField("originCountry", "FROM", countries)}
-                      {makeField("originStreet", "Street Address")}
-                      {makeField("originPostcode", "Postal code")}
-                      {makeField("originCity", "City")}
-                      {makeSelectField(
-                        "originState",
-                        "State",
-                        states.filter(
-                          (s) => s.countryId === values.originCountry
-                        )
-                      )}
-
+                      <AddressField
+                        type="origin"
+                        countries={setupState.data?.countries}
+                      />
                       <H>To Address</H>
-                      {makeSelectField("destinationCountry", "TO", countries)}
-                      {makeField("destinationStreet", "Street Address")}
-                      {makeField("destinationPostcode", "Postal code")}
-                      {makeField("destinationCity", "City")}
-                      {makeSelectField(
-                        "destinationState",
-                        "State",
-                        states.filter(
-                          (s) => s.countryId === values.destinationCountry
-                        )
-                      )}
+                      <AddressField
+                        type="destination"
+                        countries={setupState.data?.countries}
+                      />
                       {createNavigation(page, setPage, isSubmitting)}
                     </PageContents>
                   </Page>
@@ -200,7 +187,7 @@ function App() {
                       {makeSelectField(
                         "commodityId",
                         "Commodity type",
-                        commodityTypes
+                        setupState.data?.commodities
                       )}
                       {createNavigation(page, setPage, isSubmitting)}
                     </PageContents>
@@ -211,17 +198,10 @@ function App() {
                     <PageContents>
                       <H>Contact Information</H>
                       {makeField("customerOrganization", "Company name")}
-                      {makeSelectField("customerCountry", "Country", countries)}
-                      {makeField("customerStreet", "Street Address")}
-                      {makeField("customerPostcode", "Postal code")}
-                      {makeField("customerCity", "City")}
-                      {makeSelectField(
-                        "customerState",
-                        "State",
-                        states.filter(
-                          (s) => s.countryId === values.customerCountry
-                        )
-                      )}
+                      <AddressField
+                        type="customer"
+                        countries={setupState.data?.countries}
+                      />
                       {makeField("customerEmail", "Email")}
                       {createNavigation(page, setPage, isSubmitting)}
                     </PageContents>
