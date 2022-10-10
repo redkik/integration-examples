@@ -10,12 +10,14 @@ export function AddressField({ type, countries }) {
   const selectedCountry = values[`${type}Country`];
 
   useEffect(() => {
-    getStates(selectedCountry);
-  }, [selectedCountry, getStates, type, values]);
+    if (selectedCountry) {
+      getStates(selectedCountry);
+    }
+  }, [selectedCountry, getStates]);
 
   return (
     <>
-      {makeSelectField(`${type}Country`, "FROM", countries)}
+      {makeSelectField(`${type}Country`, "Country", countries)}
       {makeField(`${type}Street`, "Street Address")}
       {makeField(`${type}Postcode`, "Postal code")}
       {makeField(`${type}City`, "City")}

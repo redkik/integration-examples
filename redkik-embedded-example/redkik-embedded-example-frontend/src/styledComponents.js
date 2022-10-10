@@ -155,7 +155,7 @@ export function createNavigation(page, setPage, isSubmitting) {
           Previous
         </PageNavigationButton>
       )}
-      {page < 3 ? (
+      {page < 3 && (
         <PageNavigationButton
           disabled={isSubmitting}
           onClick={(e) => {
@@ -165,7 +165,8 @@ export function createNavigation(page, setPage, isSubmitting) {
         >
           Next
         </PageNavigationButton>
-      ) : (
+      )}
+      {page === 3 && (
         <PageSubmitButton type="submit" disabled={isSubmitting}>
           Order
         </PageSubmitButton>

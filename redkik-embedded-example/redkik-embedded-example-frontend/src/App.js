@@ -26,29 +26,37 @@ import logo from "./logo.svg";
 import demoData, { addDays } from "./data/demoData";
 import { AddressField } from "./components/AddressField";
 
-function joinAddress(direction, data, addPostcode = false, setupState, states) {
+function joinAddress(
+  direction,
+  data,
+  countries = [],
+  states = [],
+  addPostcode = false
+) {
   return [
     data[`${direction}Street`],
-    addPostcode ? data[`${direction}PostalCode`] : undefined,
+    addPostcode ? data[`${direction}Postcode`] : undefined,
     data[`${direction}City`],
-    states?.find((state) => state.value === data[`${direction}State`])?.title,
-    setupState?.data?.countries.find(
-      (country) => country.value === data[`${direction}Country`]
-    )?.title,
+    states?.find((state) => state.id === data[`${direction}State`])?.name, //TODO: Figure out a way to get states
+    countries.find((country) => country.id === data[`${direction}Country`])
+      ?.name,
   ]
     .filter((x) => x)
     .join(", ");
 }
 
-function buildRequest(data, setupState, states) {
+function buildRequest(data, countries, states) {
   return {
     ...data,
+    commodities: [
+      { commodityId: data.commodityId, insuredValue: data.insuredValue },
+    ],
     isPublic: false,
     transportType: "1",
     customerType: "1",
-    originFormatted: joinAddress("origin", data, setupState, states),
-    destinationFormatted: joinAddress("destination", data, setupState, states),
-    customerFormatted: joinAddress("customer", data, setupState, states),
+    originFormatted: joinAddress("origin", data, countries, states),
+    destinationFormatted: joinAddress("destination", data, countries, states),
+    customerFormatted: joinAddress("customer", data, countries, states),
   };
 }
 
@@ -103,6 +111,8 @@ function App() {
     insuredValue: "",
   });
   const [fakeShippingPrice, setFakeShippingPrice] = useState(0);
+  const [purchaseMessage, setPurchaseMessage] = useState("");
+
   useEffect(() => {
     if (page === 3 && formRef.current) {
       const { startDate } = formRef.current.values;
@@ -118,7 +128,7 @@ function App() {
             ...formRef.current.values,
             endDate: fakeEndDate.toISOString().slice(0, 10),
           },
-          setupState,
+          setupState.data?.countries,
           getStatesState.data
         )
       );
@@ -128,6 +138,17 @@ function App() {
   useEffect(() => {
     setup();
   }, [setup]);
+
+  useEffect(() => {
+    if (purchaseOfferState.isUninitialized || purchaseOfferState.isLoading) {
+      setPurchaseMessage("loading");
+    } else if (purchaseOfferState.isSuccess) {
+      setPurchaseMessage("success");
+    }
+  }, [purchaseMessage, setPurchaseMessage, purchaseOfferState]);
+  console.log("purchaseMessage", purchaseMessage);
+
+  console.log({ purchaseOfferState });
 
   return (
     <>
@@ -148,6 +169,7 @@ function App() {
             setTimeout(() => {
               console.log(values);
               if (values.purchaseInsurance) {
+                setPage(page + 1);
                 purchaseOffer(getOfferState.data[0].id);
               }
               setSubmitting(false);
@@ -212,8 +234,26 @@ function App() {
                     <PageContents>
                       <H>Shipment:</H>
                       <p>
-                        From <u>{joinAddress("origin", values, true)}</u> to{" "}
-                        <u>{joinAddress("destination", values, true)}</u>
+                        From{" "}
+                        <u>
+                          {joinAddress(
+                            "origin",
+                            values,
+                            setupState.data?.countries,
+                            getStatesState.data,
+                            true
+                          )}
+                        </u>{" "}
+                        to{" "}
+                        <u>
+                          {joinAddress(
+                            "destination",
+                            values,
+                            setupState.data?.countries,
+                            getStatesState.data,
+                            true
+                          )}
+                        </u>
                       </p>
                       <H>Insurance:</H>
                       <div>
@@ -226,6 +266,15 @@ function App() {
                           <div>{getOfferState.error.data.message}</div>
                         )}
                       </div>
+                      {createNavigation(page, setPage, isSubmitting)}
+                    </PageContents>
+                  </Page>
+                </>
+                <>
+                  <Page>
+                    <PageContents>
+                      <H>Purchase</H>
+                      <div>{purchaseMessage}</div>
                       {createNavigation(page, setPage, isSubmitting)}
                     </PageContents>
                   </Page>
