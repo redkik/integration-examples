@@ -22,14 +22,14 @@ async def main():
         }
 
         async with session.post(url = REDKIK_HOST + '/api/v2/user/oauth/token', data = data) as tokenResponse:
-            response = await tokenResponse.json()
-            header = {'Authorization': 'Bearer ' + response['access_token']}
+            tokenResponseAsJson = await tokenResponse.json()
+            header = {'Authorization': 'Bearer ' + tokenResponseAsJson['access_token']}
 
         # Setup
         # Get all the necessary information to make a quote
 
         async with session.get(url = REDKIK_HOST + '/api/v2/quote/quotes/setup', headers = header) as setupResponse:
-            response = await setupResponse.json()
+            setupResponseAsJson = await setupResponse.json()
 
         # Quote
         # Make sure that used policy allows the quote
@@ -37,14 +37,13 @@ async def main():
         data = {
             # Mandatory properties:
             'isPublic': 'false',
-            'commodityId': response['commodities'][0]['id'],
-            'insuredValue': 100,
+            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 100}],
             'originFormatted': 'Kirkkokatu 1, FI-00170 HELSINKI, FINLAND',
-            'destinationFormatted': 'Mannerheiminaukio 1, FI-00100 HELSINKI, FINLAND',
+            'destinationFormatted': 'Kirkkokatu 2, FI-00170 HELSINKI, FINLAND',
             'startDate': '2022-10-23T03:00:00.000+03:00',
             'endDate': '2022-10-24T03:00:00.000+03:00',
             'transportType': 1,
-            'customerId': response['customers'][0]['id'],
+            'customerId': setupResponseAsJson['customers'][0]['id'],
             # Optional properties and their types:
             #
             # OPTIONAL: Additional details about the shipment
@@ -96,19 +95,18 @@ async def main():
             # 'customerReference': 'string',
         }
     
-        async with session.post(url = REDKIK_HOST + '/api/v2/quote/quotes/quote', data = data, headers = header) as quoteResponse:
-            response = await quoteResponse.json()
+        async with session.post(url = REDKIK_HOST + '/api/v2/quote/quotes/quote', json = data, headers = header) as quoteResponse:
+            quoteResponseAsJson = await quoteResponse.json()
 
         # Purchase
         # Purchase can only be made with a valid quote offer
-
-        async with session.post(url = REDKIK_HOST + '/api/v2/quote/bookings/purchase', data = {'offerId': response[0]['id']}, headers = header) as purchaseResponse:
-            response = await purchaseResponse.json()
+        async with session.post(url = REDKIK_HOST + '/api/v2/quote/bookings/purchase', data = {'offerId': quoteResponseAsJson[0]['id']}, headers = header) as purchaseResponse:
+            purchaseResponseAsJson = await purchaseResponse.json()
 
         # Cancel
         # Booking cannot be cancelled if it's under way
 
-        async with session.patch(url = REDKIK_HOST + '/api/v2/quote/bookings/' + response['id'] + '/cancel', headers = header) as cancelResponse:
-            response = await cancelResponse.json()
+        async with session.patch(url = REDKIK_HOST + '/api/v2/quote/bookings/' + purchaseResponseAsJson['id'] + '/cancel', headers = header) as cancelResponse:
+            cancelResponse = await cancelResponse.json()
 
 asyncio.run(main())
