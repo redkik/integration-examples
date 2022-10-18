@@ -85,6 +85,7 @@ function App() {
   const [setup, setupState] = useSetupMutation();
   const [getStates, getStatesState] = useGetStatesMutation();
   const [page, setPage] = useState(0);
+  let date = new Date();
   const [sampleData, setSampleData] = useState({
     originStreet: "",
     originPostcode: "",
@@ -106,7 +107,7 @@ function App() {
     customerState: "",
     customerCountry: "",
 
-    startDate: "",
+    startDate: date.toISOString().split('T')[0],
     commodityId: "",
     insuredValue: "",
   });

@@ -29,7 +29,7 @@ export const redkikQuoteApi = createApi({
     }),
     getStates: builder.mutation({
       query: (countryId) => ({
-        url: `/config/states/country/${countryId}`,
+        url: `/config/countries/${countryId}/states`,
         method: "GET",
       }),
       transformResponse: (response) => response,
