@@ -184,7 +184,7 @@ function App() {
         <HeaderButton
           onClick={() => setSampleData({ ...sampleData, ...demoData[page] })}
         >
-          Presentation quick fill
+          Quick fill
         </HeaderButton>
       </Header>
       <WorkArea>
