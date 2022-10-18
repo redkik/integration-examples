@@ -20,7 +20,7 @@ import {
   makeCheckbox,
   createNavigation,
   PageContents,
-  H,
+  H2,
 } from "./styledComponents";
 import logo from "./logo.svg";
 import demoData, { addDays } from "./data/demoData";
@@ -107,7 +107,7 @@ function App() {
     customerState: "",
     customerCountry: "",
 
-    startDate: date.toISOString().split('T')[0],
+    startDate: date.toISOString().split("T")[0],
     commodityId: "",
     insuredValue: "",
   });
@@ -187,12 +187,12 @@ function App() {
                 <>
                   <Page>
                     <PageContents>
-                      <H>From Address</H>
+                      <H2>From Address</H2>
                       <AddressField
                         type="origin"
                         countries={setupState.data?.countries}
                       />
-                      <H>To Address</H>
+                      <H2>To Address</H2>
                       <AddressField
                         type="destination"
                         countries={setupState.data?.countries}
@@ -204,7 +204,7 @@ function App() {
                 <>
                   <Page>
                     <PageContents>
-                      <H>Shipping Details</H>
+                      <H2>Shipping Details</H2>
                       {makeField("startDate", "Shipment date", "date")}
                       {makeField("insuredValue", "Value")}
                       {makeSelectField(
@@ -219,7 +219,7 @@ function App() {
                 <>
                   <Page>
                     <PageContents>
-                      <H>Contact Information</H>
+                      <H2>Contact Information</H2>
                       {makeField("customerOrganization", "Company name")}
                       <AddressField
                         type="customer"
@@ -233,7 +233,7 @@ function App() {
                 <>
                   <Page>
                     <PageContents>
-                      <H>Shipment:</H>
+                      <H2>Shipment:</H2>
                       <p>
                         From{" "}
                         <u>
@@ -256,7 +256,7 @@ function App() {
                           )}
                         </u>
                       </p>
-                      <H>Insurance:</H>
+                      <H2>Insurance:</H2>
                       <div>
                         {getOfferState.isUninitialized ||
                         getOfferState.isLoading ? (
@@ -274,7 +274,7 @@ function App() {
                 <>
                   <Page>
                     <PageContents>
-                      <H>Purchase</H>
+                      <H2>Purchase</H2>
                       <div>{purchaseMessage}</div>
                       {createNavigation(page, setPage, isSubmitting)}
                     </PageContents>

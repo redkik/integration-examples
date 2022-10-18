@@ -7,7 +7,7 @@ export const Header = styled.header`
   height: 5rem;
 `;
 
-export const H = styled.h2`
+export const H2 = styled.h2`
   color: #222;
   font-weight: normal;
 `;
