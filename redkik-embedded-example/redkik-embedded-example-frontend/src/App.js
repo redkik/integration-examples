@@ -30,14 +30,14 @@ function joinAddress(
   direction,
   data,
   countries = [],
-  states = [],
+  state,
   addPostcode = false
 ) {
   return [
     data[`${direction}Street`],
     addPostcode ? data[`${direction}Postcode`] : undefined,
     data[`${direction}City`],
-    states?.find((state) => state.id === data[`${direction}State`])?.name, //TODO: Figure out a way to get states
+    state,
     countries.find((country) => country.id === data[`${direction}Country`])
       ?.name,
   ]
@@ -45,7 +45,13 @@ function joinAddress(
     .join(", ");
 }
 
-function buildRequest(data, countries, states) {
+function buildRequest(
+  data,
+  countries,
+  originState,
+  destinationState,
+  customerState
+) {
   return {
     ...data,
     commodities: [
@@ -54,9 +60,14 @@ function buildRequest(data, countries, states) {
     isPublic: false,
     transportType: "1",
     customerType: "1",
-    originFormatted: joinAddress("origin", data, countries, states),
-    destinationFormatted: joinAddress("destination", data, countries, states),
-    customerFormatted: joinAddress("customer", data, countries, states),
+    originFormatted: joinAddress("origin", data, countries, originState),
+    destinationFormatted: joinAddress(
+      "destination",
+      data,
+      countries,
+      destinationState
+    ),
+    customerFormatted: joinAddress("customer", data, countries, customerState),
   };
 }
 
@@ -113,6 +124,9 @@ function App() {
   });
   const [fakeShippingPrice, setFakeShippingPrice] = useState(0);
   const [purchaseMessage, setPurchaseMessage] = useState("");
+  const [originState, setOriginState] = useState("");
+  const [destinationState, setDestinationState] = useState("");
+  const [customerState, setCustomerState] = useState("");
 
   useEffect(() => {
     if (page === 3 && formRef.current) {
@@ -130,11 +144,22 @@ function App() {
             endDate: fakeEndDate.toISOString().slice(0, 10),
           },
           setupState.data?.countries,
-          getStatesState.data
+          originState,
+          destinationState,
+          customerState
         )
       );
     }
-  }, [page, formRef, getOffer, setupState, getStatesState.data]);
+  }, [
+    page,
+    formRef,
+    getOffer,
+    setupState,
+    getStatesState.data,
+    originState,
+    destinationState,
+    customerState,
+  ]);
 
   useEffect(() => {
     setup();
@@ -142,14 +167,15 @@ function App() {
 
   useEffect(() => {
     if (purchaseOfferState.isUninitialized || purchaseOfferState.isLoading) {
-      setPurchaseMessage("loading");
+      setPurchaseMessage("Loading...");
     } else if (purchaseOfferState.isSuccess) {
-      setPurchaseMessage("success");
+      setPurchaseMessage(
+        "Purchase successful! An email has been sent regarding your purchase."
+      );
+    } else {
+      setPurchaseMessage(`Error: ${purchaseOfferState.error.data.message}`);
     }
   }, [purchaseMessage, setPurchaseMessage, purchaseOfferState]);
-  console.log("purchaseMessage", purchaseMessage);
-
-  console.log({ purchaseOfferState });
 
   return (
     <>
@@ -167,122 +193,126 @@ function App() {
           initialValues={sampleData}
           enableReinitialize
           onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              console.log(values);
-              if (values.purchaseInsurance) {
+            if (values.purchaseInsurance) {
+              purchaseOffer(getOfferState.data[0].id);
+              setTimeout(() => {
                 setPage(page + 1);
-                purchaseOffer(getOfferState.data[0].id);
-              }
-              setSubmitting(false);
-            }, 400);
+              }, 400);
+            }
+            setSubmitting(false);
           }}
         >
-          {({ isSubmitting, values }) => (
-            <Form>
-              <AwesomeSlider
-                buttons={false}
-                mobileTouch={false}
-                selected={page}
-              >
-                <>
-                  <Page>
-                    <PageContents>
-                      <H2>From Address</H2>
-                      <AddressField
-                        type="origin"
-                        countries={setupState.data?.countries}
-                      />
-                      <H2>To Address</H2>
-                      <AddressField
-                        type="destination"
-                        countries={setupState.data?.countries}
-                      />
-                      {createNavigation(page, setPage, isSubmitting)}
-                    </PageContents>
-                  </Page>
-                </>
-                <>
-                  <Page>
-                    <PageContents>
-                      <H2>Shipping Details</H2>
-                      {makeField("startDate", "Shipment date", "date")}
-                      {makeField("insuredValue", "Value")}
-                      {makeSelectField(
-                        "commodityId",
-                        "Commodity type",
-                        setupState.data?.commodities
-                      )}
-                      {createNavigation(page, setPage, isSubmitting)}
-                    </PageContents>
-                  </Page>
-                </>
-                <>
-                  <Page>
-                    <PageContents>
-                      <H2>Contact Information</H2>
-                      {makeField("customerOrganization", "Company name")}
-                      <AddressField
-                        type="customer"
-                        countries={setupState.data?.countries}
-                      />
-                      {makeField("customerEmail", "Email")}
-                      {createNavigation(page, setPage, isSubmitting)}
-                    </PageContents>
-                  </Page>
-                </>
-                <>
-                  <Page>
-                    <PageContents>
-                      <H2>Shipment:</H2>
-                      <p>
-                        From{" "}
-                        <u>
-                          {joinAddress(
-                            "origin",
-                            values,
-                            setupState.data?.countries,
-                            getStatesState.data,
-                            true
-                          )}
-                        </u>{" "}
-                        to{" "}
-                        <u>
-                          {joinAddress(
-                            "destination",
-                            values,
-                            setupState.data?.countries,
-                            getStatesState.data,
-                            true
-                          )}
-                        </u>
-                      </p>
-                      <H2>Insurance:</H2>
-                      <div>
-                        {getOfferState.isUninitialized ||
-                        getOfferState.isLoading ? (
-                          <div>Loading...</div>
-                        ) : getOfferState.isSuccess ? (
-                          renderOffer(getOfferState.data[0])
-                        ) : (
-                          <div>{getOfferState.error.data.message}</div>
+          {({ isSubmitting, values }) => {
+            return (
+              <Form>
+                <AwesomeSlider
+                  buttons={false}
+                  mobileTouch={false}
+                  selected={page}
+                >
+                  <>
+                    <Page>
+                      <PageContents>
+                        <H2>From Address</H2>
+                        <AddressField
+                          type="origin"
+                          countries={setupState.data?.countries}
+                          setSelectedStateName={setOriginState}
+                        />
+                        <H2>To Address</H2>
+                        <AddressField
+                          type="destination"
+                          countries={setupState.data?.countries}
+                          setSelectedStateName={setDestinationState}
+                        />
+                        {createNavigation(page, setPage, isSubmitting)}
+                      </PageContents>
+                    </Page>
+                  </>
+                  <>
+                    <Page>
+                      <PageContents>
+                        <H2>Shipping Details</H2>
+                        {makeField("startDate", "Shipment date", "date")}
+                        {makeField("insuredValue", "Value")}
+                        {makeSelectField(
+                          "commodityId",
+                          "Commodity type",
+                          setupState.data?.commodities
                         )}
-                      </div>
-                      {createNavigation(page, setPage, isSubmitting)}
-                    </PageContents>
-                  </Page>
-                </>
-                <>
-                  <Page>
-                    <PageContents>
-                      <H2>Purchase</H2>
-                      <div>{purchaseMessage}</div>
-                      {createNavigation(page, setPage, isSubmitting)}
-                    </PageContents>
-                  </Page>
-                </>
-              </AwesomeSlider>
-            </Form>
-          )}
+                        {createNavigation(page, setPage, isSubmitting)}
+                      </PageContents>
+                    </Page>
+                  </>
+                  <>
+                    <Page>
+                      <PageContents>
+                        <H2>Contact Information</H2>
+                        {makeField("customerOrganization", "Company name")}
+                        <AddressField
+                          type="customer"
+                          countries={setupState.data?.countries}
+                          setSelectedStateName={setCustomerState}
+                        />
+                        {makeField("customerEmail", "Email")}
+                        {createNavigation(page, setPage, isSubmitting)}
+                      </PageContents>
+                    </Page>
+                  </>
+                  <>
+                    <Page>
+                      <PageContents>
+                        <H2>Shipment:</H2>
+                        <p>
+                          From{" "}
+                          <u>
+                            {joinAddress(
+                              "origin",
+                              values,
+                              setupState.data?.countries,
+                              originState,
+                              true
+                            )}
+                          </u>{" "}
+                          to{" "}
+                          <u>
+                            {joinAddress(
+                              "destination",
+                              values,
+                              setupState.data?.countries,
+                              destinationState,
+                              true
+                            )}
+                          </u>
+                        </p>
+                        <H2>Insurance:</H2>
+                        <div>
+                          {getOfferState.isUninitialized ||
+                          getOfferState.isLoading ? (
+                            <div>Loading...</div>
+                          ) : getOfferState.isSuccess ? (
+                            renderOffer(getOfferState.data[0])
+                          ) : (
+                            <div>{getOfferState.error.data.message}</div>
+                          )}
+                        </div>
+                        {createNavigation(page, setPage, isSubmitting)}
+                      </PageContents>
+                    </Page>
+                  </>
+                  <>
+                    <Page>
+                      <PageContents>
+                        <H2>Purchase</H2>
+                        <div>{purchaseMessage}</div>
+                        {createNavigation(page, setPage, isSubmitting)}
+                      </PageContents>
+                    </Page>
+                  </>
+                </AwesomeSlider>
+              </Form>
+            );
+          }}
         </Formik>
       </WorkArea>
     </>

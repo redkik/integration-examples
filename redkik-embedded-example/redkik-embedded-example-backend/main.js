@@ -13,7 +13,6 @@ app.use(
   "/",
   proxy(REDKIK_HOST, {
     proxyReqOptDecorator: async function (proxyReqOpts, srcReq) {
-      console.log({ REDKIK_HOST, CLIENT_ID, CLIENT_SECRET });
       const { data } = await axios.post(
         `${REDKIK_HOST}/api/v2/user/oauth/token`,
         {
@@ -28,7 +27,6 @@ app.use(
           },
         }
       );
-      console.log({ data });
       proxyReqOpts.headers["Authorization"] = `Bearer ${data.access_token}`;
       return proxyReqOpts;
     },

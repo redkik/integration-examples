@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import { makeSelectField, makeField } from "../styledComponents";
 import { useGetStatesMutation } from "../redkikApi";
 
-export function AddressField({ type, countries }) {
+export function AddressField({ type, countries, setSelectedStateName }) {
   const { values } = useFormikContext();
   const [getStates, getStatesState] = useGetStatesMutation();
 
@@ -14,6 +14,16 @@ export function AddressField({ type, countries }) {
       getStates(selectedCountry);
     }
   }, [selectedCountry, getStates]);
+
+  const selectedState = values[`${type}State`];
+  useEffect(() => {
+    if (selectedState) {
+      const stateName = getStatesState.data?.find(
+        (state) => state.id === selectedState
+      )?.name;
+      setSelectedStateName(stateName);
+    }
+  }, [values, setSelectedStateName, getStatesState.data, selectedState]);
 
   return (
     <>
