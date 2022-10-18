@@ -131,7 +131,7 @@ function App() {
   useEffect(() => {
     if (page === 3 && formRef.current) {
       const { startDate } = formRef.current.values;
-      const distance = 1200; //getDistance(from, to);
+      const distance = 1200;
       const fakeEndDate = addDays(
         new Date(startDate),
         Math.ceil(distance / 500000)

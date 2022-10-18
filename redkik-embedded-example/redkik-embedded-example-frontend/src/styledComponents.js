@@ -89,7 +89,6 @@ export const PageNavigation = styled.div`
 export const PageNavigationButton = styled.button`
   border: none;
   padding: 0.8rem 2rem;
-  /* border-radius: 0.5rem; */
   color: white;
   margin-bottom: 2rem;
   background-color: #0c8bc1;
