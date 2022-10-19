@@ -7,8 +7,10 @@ const { REDKIK_HOST, CLIENT_ID, CLIENT_SECRET } = process.env;
 
 async function apiCalls() {
   try {
-    // Access Token
-    // Create an Access Token. You will need this to make any of the other API calls
+    /*
+      Access Token
+      Create an Access Token. You will need this to make any of the other API calls
+    */
 
     const { data } = await axios.post(
       `${REDKIK_HOST}/api/v2/user/oauth/token`,
@@ -25,8 +27,10 @@ async function apiCalls() {
       }
     );
 
-    // Setup
-    // Get all the necessary information to make a quote
+    /*
+      Setup
+      Get all the necessary information to make a quote
+    */
 
     const { data: setup } = await axios.get(
       `${REDKIK_HOST}/api/v2/quote/quotes/setup`,
@@ -38,13 +42,17 @@ async function apiCalls() {
       }
     );
 
-    // Quote
-    // Make sure that used policy allows the quote
+    /*
+      Quote
+      Make sure that used policy allows the quote
+    */
 
     const { data: quote } = await axios.post(
       `${REDKIK_HOST}/api/v2/quote/quotes/quote`,
       {
-        // Mandatory properties:
+        /*
+          Mandatory properties:
+        */
         isPublic: false,
         commodityId: setup.commodities[0].id,
         insuredValue: 1000,
@@ -55,20 +63,15 @@ async function apiCalls() {
         transportType: 1,
         customerId: setup.customers[0].id,
 
-        // Optional properties and their types:
-        //
+        /* 
+          Optional properties and their types:
+        */
+
+        /*
+          OPTIONAL: Additional details about the shipment
+        */
         // commodityDescription: string
         // trackingCode: string,
-        // originStreet: string,
-        // originState: string,
-        // originPostcode: string,
-        // originCity: string,
-        // originCountry: string,
-        // destinationStreet: string,
-        // destinationState: string,
-        // destinationPostcode: string,
-        // destinationCity: string,
-        // destinationCountry: string,
         // courierId: string,
         // exitPortId: string,
         // entryPortId: string,
@@ -78,6 +81,29 @@ async function apiCalls() {
         // vessel: string,
         // bookingFee: number,
         // bookingFeeType: number,
+        // captcha: string,
+
+        /*
+          OPTIONAL: Origin address information, alternative to originFormatted
+        */
+        // originStreet: string,
+        // originState: string,
+        // originPostcode: string,
+        // originCity: string,
+        // originCountry: string,
+
+        /*
+          OPTIONAL: Destination address information, alternative to destinationFormatted
+        */
+        // destinationStreet: string,
+        // destinationState: string,
+        // destinationPostcode: string,
+        // destinationCity: string,
+        // destinationCountry: string,
+
+        /*
+          OPTIONAL: Customer details, alternative to customerId, will create a new customer
+        */
         // customerType: number,
         // customerOrganization: string,
         // customerTaxId: string,
@@ -92,7 +118,6 @@ async function apiCalls() {
         // customerPostcode: string,
         // customerCountry: string,
         // customerReference: string,
-        // captcha: string,
       },
       {
         headers: {
@@ -103,8 +128,10 @@ async function apiCalls() {
       }
     );
 
-    // Purchase
-    // Purchase can only be made with a valid quote offer
+    /*
+      Purchase
+      Purchase can only be made with a valid quote offer
+    */
 
     const { data: purchase } = await axios.post(
       `${REDKIK_HOST}/api/v2/quote/bookings/purchase`,
@@ -120,8 +147,10 @@ async function apiCalls() {
       }
     );
 
-    // Cancel
-    // Booking cannot be cancelled if it's under way
+    /*
+      Cancel
+      Booking cannot be cancelled if it's under way
+    */
 
     await axios.patch(
       `${REDKIK_HOST}/api/v2/quote/bookings/${purchase.id}/cancel`,

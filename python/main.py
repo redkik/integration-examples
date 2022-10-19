@@ -61,7 +61,7 @@ async def main():
             # 'bookingFeeType': number,
             # 'captcha': 'string',
             #
-            # OPTIONAL: Alternative for originFormatted
+            # OPTIONAL: Origin address information, alternative to originFormatted
             #
             # 'originStreet': 'string',
             # 'originState': 'string',
@@ -69,7 +69,7 @@ async def main():
             # 'originCity': 'string',
             # 'originCountry': 'string',
             #
-            # OPTIONAL: Alternative for destinationFormatted
+            # OPTIONAL: Destination address information, alternative to destinationFormatted
             #
             # 'destinationStreet': 'string',
             # 'destinationState': 'string',
@@ -77,7 +77,7 @@ async def main():
             # 'destinationCity': 'string',
             # 'destinationCountry': 'string',
             #
-            # OPTIONAL: Alternative for customerId, this will create new customer
+            # OPTIONAL: Customer details, alternative to customerId, will create a new customer
             #
             # 'customerType': number,
             # 'customerOrganization': 'string',
