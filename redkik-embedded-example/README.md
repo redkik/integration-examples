@@ -1,4 +1,4 @@
-# Redkik python integration example
+# Redkik integration examples
 
 ## Get started
 
@@ -6,30 +6,10 @@ To be able to call the API, you will need a `CLIENT_ID` and a `CLIENT_SECRET`, w
 
 Once you have the `CLIENT_ID` and the `CLIENT_SECRET`, create a .env file to the root of the project based on the .envtemplate. You need to also add `REDKIK_HOST`, which is the URL where you will be calling the API.
 
-### How to run the examples
+### Start the app
 
-In the root, run:
-
-```bash
-docker-compose run python
-```
-
-Or alternatively:
-
-Navigate to the python folder:
+In the redkik-embedded-example folder, run:
 
 ```bash
-cd python
-```
-
-Make sure python is installed and install required packages:
-
-```bash
-pip3 install -r requirements.txt
-```
-
-Run the examples:
-
-```bash
-python3 main.py
+docker-compose up
 ```

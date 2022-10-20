@@ -1,4 +1,4 @@
-# Redkik python integration example
+# Redkik integration examples
 
 ## Get started
 
@@ -11,25 +11,25 @@ Once you have the `CLIENT_ID` and the `CLIENT_SECRET`, create a .env file to the
 In the root, run:
 
 ```bash
-docker-compose run python
+docker-compose run javascript
 ```
 
 Or alternatively:
 
-Navigate to the python folder:
+Navigate to the javascript folder:
 
 ```bash
-cd python
+cd javascript
 ```
 
-Make sure python is installed and install required packages:
+Install packages:
 
 ```bash
-pip3 install -r requirements.txt
+npm install
 ```
 
 Run the examples:
 
 ```bash
-python3 main.py
+npm start
 ```
