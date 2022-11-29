@@ -12,6 +12,7 @@ export interface SetupResponse {
   states?: State[];
   couriers?: Courier[];
   customers?: Customer[];
+  currencies?: Currency[];
   currencyId?: string;
 }
 
@@ -58,6 +59,14 @@ export interface Courier {
   deletedAt?: string;
 }
 
+export interface Currency {
+  id?: string;
+  symbol: string;
+  decimalPlaces: number;
+  divisionModifier: number;
+  deletedAt?: string;
+}
+
 export interface Customer {
   id?: string;
   addressId?: string;
@@ -82,7 +91,7 @@ export interface QuoteResponse {
   */
   id: string;
   isPublic: true;
-  commodityId: string;
+  commodities: string;
   insuredValue: number;
   originFormatted: string;
   startDate: string;

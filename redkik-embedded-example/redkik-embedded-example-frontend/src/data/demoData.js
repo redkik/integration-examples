@@ -18,8 +18,13 @@ const demoData = [
   },
   {
     startDate: addDays(new Date(), 7).toISOString().slice(0, 10),
-    commodityId: "3eeada1d-ab9b-4f39-80a5-d4ff9f89614b",
-    insuredValue: 1000,
+    commodities: [
+      {
+        commodityId: "3eeada1d-ab9b-4f39-80a5-d4ff9f89614b",
+        insuredValue: 100,
+        currencyId: "USD",
+      },
+    ],
   },
   {
     customerEmail: "customer@example.com",
