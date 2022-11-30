@@ -179,9 +179,7 @@ function App() {
     <>
       <Header>
         <Logo src={logo} alt="logo" />
-        <HeaderButton
-          onClick={() => setSampleData({ ...sampleData, ...demoData[page] })}
-        >
+        <HeaderButton onClick={() => setSampleData(demoData)}>
           Quick fill
         </HeaderButton>
       </Header>
