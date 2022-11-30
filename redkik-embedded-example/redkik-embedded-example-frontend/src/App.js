@@ -263,6 +263,7 @@ function App() {
                               <FieldArrayButton
                                 type="button"
                                 color="green"
+                                style={{float:'right'}}
                                 onClick={() =>
                                   arrayHelpers.push({
                                     commodityId: "",
@@ -271,7 +272,7 @@ function App() {
                                   })
                                 }
                               >
-                                Add
+                                Add commodity
                               </FieldArrayButton>
                             </div>
                           )}
