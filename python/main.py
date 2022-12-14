@@ -37,7 +37,7 @@ async def main():
         data = {
             # Mandatory properties:
             'isPublic': 'false',
-            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 100}],
+            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 100, 'currencyId': setupResponseAsJson['currencies'][0]['id']}],
             'originFormatted': 'Kirkkokatu 1, FI-00170 HELSINKI, FINLAND',
             'destinationFormatted': 'Kirkkokatu 2, FI-00170 HELSINKI, FINLAND',
             'startDate': '2022-10-23T03:00:00.000+03:00',

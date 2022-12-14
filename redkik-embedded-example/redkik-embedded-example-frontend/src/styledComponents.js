@@ -98,6 +98,10 @@ export const PageSubmitButton = styled(PageNavigationButton)`
   background-color: green;
   color: white;
 `;
+export const FieldArrayButton = styled(PageNavigationButton)`
+  background-color: ${(props) => props.color};
+  color: white;
+`;
 
 export function makeCheckbox(name, label) {
   return (
@@ -123,14 +127,18 @@ export function makeSelectField(name, label, data = []) {
       <Field name={name} as="select">
         <option disabled value=""></option>
         {options
-          .sort((a, b) => a.name.localeCompare(b.name))
+          .sort((a, b) =>
+            name.includes("currencyId")
+              ? a.id.localeCompare(b.id)
+              : a.name.localeCompare(b.name)
+          )
           .map((option) => (
             <option
               key={option.id}
               value={option.id}
               disabled={option.disabled}
             >
-              {option.name}
+              {name.includes("currencyId") ? option.id : option.name}
             </option>
           ))}
       </Field>

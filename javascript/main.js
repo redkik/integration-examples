@@ -54,7 +54,13 @@ async function apiCalls() {
           Mandatory properties:
         */
         isPublic: false,
-        commodityId: setup.commodities[0].id,
+        commodities: [
+          {
+            commodityId: setup.commodities[0].id,
+            insuredValue: 100,
+            currencyId: setup.currencies[0].id,
+          },
+        ],
         insuredValue: 1000,
         originFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
         destinationFormatted: "Länsikatu 15, FI-70820 KUOPIO, FINLAND",

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form, FieldArray } from "formik";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
 
@@ -21,6 +21,7 @@ import {
   createNavigation,
   PageContents,
   H2,
+  FieldArrayButton,
 } from "./styledComponents";
 import logo from "./logo.svg";
 import demoData, { addDays } from "./data/demoData";
@@ -54,9 +55,7 @@ function buildRequest(
 ) {
   return {
     ...data,
-    commodities: [
-      { commodityId: data.commodityId, insuredValue: data.insuredValue },
-    ],
+    commodities: data.commodities,
     isPublic: false,
     transportType: "1",
     customerType: "1",
@@ -94,8 +93,8 @@ function App() {
   const [getOffer, getOfferState] = useGetOfferMutation();
   const [purchaseOffer, purchaseOfferState] = usePurchaseOfferMutation();
   const [setup, setupState] = useSetupMutation();
-  const [getStates, getStatesState] = useGetStatesMutation();
   const [page, setPage] = useState(0);
+  const [getStates, getStatesState] = useGetStatesMutation({});
   let date = new Date();
   const [sampleData, setSampleData] = useState({
     originStreet: "",
@@ -119,8 +118,7 @@ function App() {
     customerCountry: "",
 
     startDate: date.toISOString().split("T")[0],
-    commodityId: "",
-    insuredValue: "",
+    commodities: [{ commodityId: "", insuredValue: "", currencyId: "" }],
   });
   const [fakeShippingPrice, setFakeShippingPrice] = useState(0);
   const [purchaseMessage, setPurchaseMessage] = useState("");
@@ -181,9 +179,7 @@ function App() {
     <>
       <Header>
         <Logo src={logo} alt="logo" />
-        <HeaderButton
-          onClick={() => setSampleData({ ...sampleData, ...demoData[page] })}
-        >
+        <HeaderButton onClick={() => setSampleData(demoData)}>
           Quick fill
         </HeaderButton>
       </Header>
@@ -234,12 +230,53 @@ function App() {
                       <PageContents>
                         <H2>Shipping Details</H2>
                         {makeField("startDate", "Shipment date", "date")}
-                        {makeField("insuredValue", "Value")}
-                        {makeSelectField(
-                          "commodityId",
-                          "Commodity type",
-                          setupState.data?.commodities
-                        )}
+                        <H2>Commodities</H2>
+                        <FieldArray
+                          name="commodities"
+                          render={(arrayHelpers) => (
+                            <div>
+                              {values.commodities.map((commodity, index) => (
+                                <div key={index}>
+                                  {makeField(
+                                    `commodities[${index}].insuredValue`,
+                                    "Value"
+                                  )}
+                                  {makeSelectField(
+                                    `commodities[${index}].commodityId`,
+                                    "Commodity type",
+                                    setupState.data?.commodities
+                                  )}
+                                  {makeSelectField(
+                                    `commodities[${index}].currencyId`,
+                                    "Currency",
+                                    setupState.data?.currencies
+                                  )}
+                                  <FieldArrayButton
+                                    color="red"
+                                    type="button"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    Remove
+                                  </FieldArrayButton>
+                                </div>
+                              ))}
+                              <FieldArrayButton
+                                type="button"
+                                color="green"
+                                style={{float:'right'}}
+                                onClick={() =>
+                                  arrayHelpers.push({
+                                    commodityId: "",
+                                    insuredValue: "",
+                                    currencyId: "",
+                                  })
+                                }
+                              >
+                                Add commodity
+                              </FieldArrayButton>
+                            </div>
+                          )}
+                        />
                         {createNavigation(page, setPage, isSubmitting)}
                       </PageContents>
                     </Page>
