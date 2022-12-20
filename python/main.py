@@ -37,15 +37,23 @@ async def main():
         data = {
             # Mandatory properties:
             'isPublic': 'false',
-            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 100, 'currencyId': setupResponseAsJson['currencies'][0]['id']}],
-            'originFormatted': 'Kirkkokatu 1, FI-00170 HELSINKI, FINLAND',
-            'destinationFormatted': 'Kirkkokatu 2, FI-00170 HELSINKI, FINLAND',
+            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 1000, 'currencyId': setupResponseAsJson['currencies'][0]['id']}],
+            'originFormatted': '202 Bank St, Oxford, MD 21654, USA',
+            'destinationFormatted': 'Länsikatu 15, FI-80110 JOENSUU, FINLAND',
             'startDate': '2022-10-23T03:00:00.000+03:00',
             'endDate': '2022-10-24T03:00:00.000+03:00',
             'transportType': 1,
-            'customerId': setupResponseAsJson['customers'][0]['id'],
+            'customerType': 1,
+            'customerOrganization': "Redkik Inc.",
+            'customerTaxId': "XXXXXXXX",
+            'customerForename': "Redkik",
+            'customerSurname': "Example",
+            'customerEmail': "example@redkik.com",
+            'customerPhone': "+14432980790",
+            'customerFormatted': "202 Bank St, Oxford, MD 21654, USA",
+
             # Optional properties and their types:
-            #
+            
             # OPTIONAL: Additional details about the shipment
             #
             # 'commodityDescription': 'string'
@@ -60,7 +68,7 @@ async def main():
             # 'bookingFee': number,
             # 'bookingFeeType': number,
             # 'captcha': 'string',
-            #
+            
             # OPTIONAL: Origin address information, alternative to originFormatted
             #
             # 'originStreet': 'string',
@@ -68,7 +76,7 @@ async def main():
             # 'originPostcode': 'string',
             # 'originCity': 'string',
             # 'originCountry': 'string',
-            #
+            
             # OPTIONAL: Destination address information, alternative to destinationFormatted
             #
             # 'destinationStreet': 'string',
@@ -76,23 +84,19 @@ async def main():
             # 'destinationPostcode': 'string',
             # 'destinationCity': 'string',
             # 'destinationCountry': 'string',
+            
+            # OPTIONAL: Alternative to customer details, will use existing customer
             #
-            # OPTIONAL: Customer details, alternative to customerId, will create a new customer
+            # customerId: string,
+            
+            # OPTIONAL: Customer address information, alternative to customerFormatted
             #
-            # 'customerType': number,
-            # 'customerOrganization': 'string',
-            # 'customerTaxId': 'string',
-            # 'customerForename': 'string',
-            # 'customerSurname': 'string',
-            # 'customerEmail': 'string',
-            # 'customerPhone': 'string',
-            # 'customerFormatted': 'string',
-            # 'customerStreet': 'string',
-            # 'customerCity': 'string',
-            # 'customerState': 'string',
-            # 'customerPostcode': 'string',
-            # 'customerCountry': 'string',
-            # 'customerReference': 'string',
+            # customerStreet: string,
+            # customerCity: string,
+            # customerState: string,
+            # customerPostcode: string,
+            # customerCountry: string,
+            # customerReference: string,
         }
     
         async with session.post(url = REDKIK_HOST + '/api/v2/quote/quotes/quote', json = data, headers = header) as quoteResponse:
