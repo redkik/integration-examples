@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.ts",
   "scripts": {
+    "prestart": "npm install",
     "start": "ts-node main.ts"
   },
   "author": "",
