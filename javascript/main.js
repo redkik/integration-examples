@@ -26,6 +26,7 @@ async function apiCalls() {
         },
       }
     );
+    console.log(`Recieved an AccessToken ${data.access_token}`);
 
     /*
       Setup
@@ -41,6 +42,7 @@ async function apiCalls() {
         },
       }
     );
+    console.log(`Recieved a setup data`, setup);
 
     /*
       Quote
@@ -67,7 +69,14 @@ async function apiCalls() {
         startDate: "2023-02-23T03:00:00.000+03:00",
         endDate: "2023-02-24T03:00:00.000+03:00",
         transportType: 1,
-        customerId: setup.customers[0].id,
+        customerType: 1,
+        customerOrganization: "Redkik Inc.",
+        customerTaxId: "XXXXXXXX",
+        customerForename: "Redkik",
+        customerSurname: "Example",
+        customerEmail: "example@redkik.com",
+        customerPhone: "+14432980790",
+        customerFormatted: "202 Bank St, Oxford, MD 21654, USA",
 
         /* 
           Optional properties and their types:
@@ -114,16 +123,13 @@ async function apiCalls() {
         // destinationCountry: string,
 
         /*
-          OPTIONAL: Customer details, alternative to customerId, will create a new customer
+          OPTIONAL: Alternative to customer details, will use existing customer
         */
-        // customerType: number,
-        // customerOrganization: string,
-        // customerTaxId: string,
-        // customerForename: string,
-        // customerSurname: string,
-        // customerEmail: string,
-        // customerPhone: string,
-        // customerFormatted: string,
+        //customerId: string,
+
+        /*
+          OPTIONAL: Customer address information, alternative to customerFormatted
+        */
         // customerStreet: string,
         // customerCity: string,
         // customerState: string,
@@ -139,6 +145,7 @@ async function apiCalls() {
         },
       }
     );
+    console.log(`Recieved a quote with uuid ${quote[0].id}`);
 
     /*
       Purchase
@@ -158,6 +165,9 @@ async function apiCalls() {
         },
       }
     );
+    console.log(
+      `Booked an insurance with uuid ${purchase.id} and reference ${purchase.reference}`
+    );
 
     /*
       Cancel
@@ -175,7 +185,9 @@ async function apiCalls() {
         },
       }
     );
+    console.log(`Canceled an insurance with uuid ${purchase.id}`);
   } catch (error) {
+    console.error(error);
     if (axios.isAxiosError(error)) {
       console.log("error message: ", error.message);
       return error.message;
