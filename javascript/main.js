@@ -63,7 +63,6 @@ async function apiCalls() {
             currencyId: setup.currencyId,
           },
         ],
-        insuredValue: 1000,
         originFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
         destinationFormatted: "Länsikatu 15, FI-70820 KUOPIO, FINLAND",
         startDate: "2023-02-23T03:00:00.000+03:00",
