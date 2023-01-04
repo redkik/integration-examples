@@ -46,6 +46,7 @@ async function apiCalls() {
         },
       }
     );
+    console.log(`Recieved a setup data`);
 
     /*
       Quote
