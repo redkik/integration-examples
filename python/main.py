@@ -37,14 +37,19 @@ async def main():
         data = {
             # Mandatory properties:
             'isPublic': 'false',
-            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 100, 'currencyId': setupResponseAsJson['currencies'][0]['id']}],
+            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 100, 'currencyId': setupResponseAsJson['currencyId']}],
             'originFormatted': 'Kirkkokatu 1, FI-00170 HELSINKI, FINLAND',
             'destinationFormatted': 'Kirkkokatu 2, FI-00170 HELSINKI, FINLAND',
-            'startDate': '2022-10-23T03:00:00.000+03:00',
-            'endDate': '2022-10-24T03:00:00.000+03:00',
+            'startDate': '2023-02-23T03:00:00.000+03:00',
+            'endDate': '2023-02-24T03:00:00.000+03:00',
             'transportType': 1,
             'customerId': setupResponseAsJson['customers'][0]['id'],
             # Optional properties and their types:
+            #
+            # OPTIONAL: Additional details for organization. PolicyId is required if organization has multiple polices
+            #
+            # 'policyId': 'string'
+            # 'organizationId': 'string',
             #
             # OPTIONAL: Additional details about the shipment
             #

@@ -58,20 +58,26 @@ async function apiCalls() {
           {
             commodityId: setup.commodities[0].id,
             insuredValue: 100,
-            currencyId: setup.currencies[0].id,
+            currencyId: setup.currencyId,
           },
         ],
         insuredValue: 1000,
         originFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
         destinationFormatted: "Länsikatu 15, FI-70820 KUOPIO, FINLAND",
-        startDate: "2022-10-23T03:00:00.000+03:00",
-        endDate: "2022-10-24T03:00:00.000+03:00",
+        startDate: "2023-02-23T03:00:00.000+03:00",
+        endDate: "2023-02-24T03:00:00.000+03:00",
         transportType: 1,
         customerId: setup.customers[0].id,
 
         /* 
           Optional properties and their types:
         */
+
+        /*
+          OPTIONAL: Additional details for organization. PolicyId is required if organization has multiple policies
+        */
+        // policyId: setup.policies[0].id,
+        // organizationId: string;
 
         /*
           OPTIONAL: Additional details about the shipment

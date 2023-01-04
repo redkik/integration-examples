@@ -121,6 +121,12 @@ export function makeField(name, label, type = "text") {
 }
 export function makeSelectField(name, label, data = []) {
   const options = [...data];
+
+  const pickOptionLabel = (option) => {
+    if (name.includes("currencyId")) return option.id;
+    if (name === "policyId") return option.alias;
+    return option.name;
+  };
   return (
     <FieldWrapper>
       <Label htmlFor={name}>{label}</Label>
@@ -128,7 +134,7 @@ export function makeSelectField(name, label, data = []) {
         <option disabled value=""></option>
         {options
           .sort((a, b) =>
-            name.includes("currencyId")
+            name.includes("currencyId") || name.includes("policyId")
               ? a.id.localeCompare(b.id)
               : a.name.localeCompare(b.name)
           )
@@ -138,7 +144,7 @@ export function makeSelectField(name, label, data = []) {
               value={option.id}
               disabled={option.disabled}
             >
-              {name.includes("currencyId") ? option.id : option.name}
+              {pickOptionLabel(option)}
             </option>
           ))}
       </Field>
