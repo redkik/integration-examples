@@ -61,12 +61,12 @@ async function apiCalls() {
         commodities: [
           {
             commodityId: setup.commodities[0].id,
-            insuredValue: 100,
+            insuredValue: 1000,
             currencyId: setup.currencyId,
           },
         ],
-        originFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
-        destinationFormatted: "Länsikatu 15, FI-70820 KUOPIO, FINLAND",
+        originFormatted: "202 Bank St, Oxford, MD 21654, USA",
+        destinationFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
         startDate: "2023-02-23T03:00:00.000+03:00",
         endDate: "2023-02-24T03:00:00.000+03:00",
         transportType: 1,

@@ -37,9 +37,9 @@ async def main():
         data = {
             # Mandatory properties:
             'isPublic': 'false',
-            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 100, 'currencyId': setupResponseAsJson['currencyId']}],
-            'originFormatted': 'Kirkkokatu 1, FI-00170 HELSINKI, FINLAND',
-            'destinationFormatted': 'Kirkkokatu 2, FI-00170 HELSINKI, FINLAND',
+            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 1000, 'currencyId': setupResponseAsJson['currencyId']}],
+            'originFormatted': '202 Bank St, Oxford, MD 21654, USA',
+            'destinationFormatted': 'Länsikatu 15, FI-80110 JOENSUU, FINLAND',
             'startDate': '2023-02-23T03:00:00.000+03:00',
             'endDate': '2023-02-24T03:00:00.000+03:00',
             'transportType': 1,
