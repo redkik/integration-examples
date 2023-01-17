@@ -97,6 +97,7 @@ function App() {
   const [getStates, getStatesState] = useGetStatesMutation({});
   let date = new Date();
   const [sampleData, setSampleData] = useState({
+    policyId: "",
     originStreet: "",
     originPostcode: "",
     originCity: "",
@@ -125,6 +126,19 @@ function App() {
   const [originState, setOriginState] = useState("");
   const [destinationState, setDestinationState] = useState("");
   const [customerState, setCustomerState] = useState("");
+  const pickCommodities = (values) => {
+    if (setupState.data?.policies.length > 1) {
+      if (values.policyId === "") return [];
+
+      const policy = setupState.data?.policies?.find(
+        (p) => p.id === values.policyId
+      );
+      return setupState.data?.commodities?.filter((c) =>
+        policy?.commodityIds?.includes(c.id)
+      );
+    }
+    return setupState.data?.commodities;
+  };
 
   useEffect(() => {
     if (page === 3 && formRef.current) {
@@ -209,6 +223,8 @@ function App() {
                   <>
                     <Page>
                       <PageContents>
+                        <H2>Shipping Details</H2>
+                        {makeField("startDate", "Shipment date", "date")}
                         <H2>From Address</H2>
                         <AddressField
                           type="origin"
@@ -228,8 +244,16 @@ function App() {
                   <>
                     <Page>
                       <PageContents>
-                        <H2>Shipping Details</H2>
-                        {makeField("startDate", "Shipment date", "date")}
+                        {setupState?.data?.policies?.length > 1 && (
+                          <>
+                            <H2>Policy selection</H2>
+                            {makeSelectField(
+                              `policyId`,
+                              "Policy",
+                              setupState.data?.policies
+                            )}
+                          </>
+                        )}
                         <H2>Commodities</H2>
                         <FieldArray
                           name="commodities"
@@ -244,7 +268,7 @@ function App() {
                                   {makeSelectField(
                                     `commodities[${index}].commodityId`,
                                     "Commodity type",
-                                    setupState.data?.commodities
+                                    pickCommodities(values)
                                   )}
                                   {makeSelectField(
                                     `commodities[${index}].currencyId`,
@@ -263,7 +287,7 @@ function App() {
                               <FieldArrayButton
                                 type="button"
                                 color="green"
-                                style={{float:'right'}}
+                                style={{ float: "right" }}
                                 onClick={() =>
                                   arrayHelpers.push({
                                     commodityId: "",

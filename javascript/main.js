@@ -60,14 +60,13 @@ async function apiCalls() {
           {
             commodityId: setup.commodities[0].id,
             insuredValue: 1000,
-            currencyId: setup.currencies[0].id,
+            currencyId: setup.currencyId,
           },
         ],
-        insuredValue: 1000,
         originFormatted: "202 Bank St, Oxford, MD 21654, USA",
         destinationFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
-        startDate: "2022-10-23T03:00:00.000+03:00",
-        endDate: "2022-10-24T03:00:00.000+03:00",
+        startDate: "2023-02-23T03:00:00.000+03:00",
+        endDate: "2023-02-24T03:00:00.000+03:00",
         transportType: 1,
         customerType: 1,
         customerOrganization: "Redkik Inc.",
@@ -81,6 +80,12 @@ async function apiCalls() {
         /* 
           Optional properties and their types:
         */
+
+        /*
+          OPTIONAL: Additional details for organization. PolicyId is required if organization has multiple policies
+        */
+        // policyId: setup.policies[0].id,
+        // organizationId: string;
 
         /*
           OPTIONAL: Additional details about the shipment

@@ -14,7 +14,40 @@ export interface SetupResponse {
   customers?: Customer[];
   currencies?: Currency[];
   currencyId?: string;
+  allowModifyBookingFee?: boolean;
+  allowBeneficiary?: boolean;
+  allowMultiCommodity?: boolean;
+  hideCostBreakdown?: boolean;
+  dateFormat?: string;
+  policies?: OrganizationPolicyDto[];
+  endorsements?: OrganizationEndorsementDto[];
+  allowQuotation?: boolean;
+  requireConfirmation?: boolean;
+  documents?: DocumentDto[];
+  minAllowedDate?: MinAllowedDate;
 }
+
+export interface OrganizationPolicyDto {
+  policyId: string;
+  alias?: string;
+  name?: string;
+  id?: string;
+  commodityIds?: any[];
+}
+
+export interface OrganizationEndorsementDto {
+  id?: string;
+  organizationId?: string;
+  policyId?: string;
+  reference?: string;
+}
+
+export interface DocumentDto {
+  name?: string;
+  url?: string;
+}
+
+export type MinAllowedDate = { [key in "land" | "sea" | "air"]?: number };
 
 export interface Commodity {
   id?: string;
@@ -102,6 +135,12 @@ export interface QuoteResponse {
   /* 
     Optional properties and their types:
   */
+
+  /*
+    OPTIONAL: Additional details for organization. PolicyId is required if organization has multiple policies
+  */
+  policyId: string;
+  organizationId: string;
 
   /*
     OPTIONAL: Additional details about the shipment

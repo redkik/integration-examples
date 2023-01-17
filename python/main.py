@@ -37,11 +37,11 @@ async def main():
         data = {
             # Mandatory properties:
             'isPublic': 'false',
-            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 1000, 'currencyId': setupResponseAsJson['currencies'][0]['id']}],
+            'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 1000, 'currencyId': setupResponseAsJson['currencyId']}],
             'originFormatted': '202 Bank St, Oxford, MD 21654, USA',
             'destinationFormatted': 'Länsikatu 15, FI-80110 JOENSUU, FINLAND',
-            'startDate': '2022-10-23T03:00:00.000+03:00',
-            'endDate': '2022-10-24T03:00:00.000+03:00',
+            'startDate': '2023-02-23T03:00:00.000+03:00',
+            'endDate': '2023-02-24T03:00:00.000+03:00',
             'transportType': 1,
             'customerType': 1,
             'customerOrganization': "Redkik Inc.",
@@ -53,7 +53,12 @@ async def main():
             'customerFormatted': "202 Bank St, Oxford, MD 21654, USA",
 
             # Optional properties and their types:
-            
+            #
+            # OPTIONAL: Additional details for organization. PolicyId is required if organization has multiple polices
+            #
+            # 'policyId': 'string'
+            # 'organizationId': 'string',
+            #
             # OPTIONAL: Additional details about the shipment
             #
             # 'commodityDescription': 'string'
