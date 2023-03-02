@@ -30,7 +30,7 @@ async function apiCalls() {
         },
       }
     );
-    console.log(`Recieved an AccessToken ${data.access_token}`);
+    console.log(`Received an AccessToken ${data.access_token}`);
 
     /*
       Setup
@@ -46,7 +46,7 @@ async function apiCalls() {
         },
       }
     );
-    console.log(`Recieved a setup data`);
+    console.log(`Received a setup data`);
 
     /*
       Quote
@@ -67,8 +67,8 @@ async function apiCalls() {
         ],
         originFormatted: "202 Bank St, Oxford, MD 21654, USA",
         destinationFormatted: "Länsikatu 15, FI-80110 JOENSUU, FINLAND",
-        startDate: "2023-02-23T03:00:00.000+03:00",
-        endDate: "2023-02-24T03:00:00.000+03:00",
+        startDate: "2023-05-23T03:00:00.000+03:00",
+        endDate: "2023-05-24T03:00:00.000+03:00",
         transportType: 1,
         customerType: 1,
         customerOrganization: "Redkik Inc.",
@@ -140,7 +140,7 @@ async function apiCalls() {
         },
       }
     );
-    console.log(`Recieved a quote with uuid ${quote[0].id}`);
+    console.log(`Received a quote with uuid ${quote[0].id}`);
 
     /*
       Purchase

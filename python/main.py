@@ -25,11 +25,16 @@ async def main():
             tokenResponseAsJson = await tokenResponse.json()
             header = {'Authorization': 'Bearer ' + tokenResponseAsJson['access_token']}
 
+        print('Received an AccessToken ' + tokenResponseAsJson['access_token'])
+
         # Setup
         # Get all the necessary information to make a quote
 
         async with session.get(url = REDKIK_HOST + '/api/v2/quote/quotes/setup', headers = header) as setupResponse:
             setupResponseAsJson = await setupResponse.json()
+
+        print('Received a setup data')
+        
 
         # Quote
         # Make sure that used policy allows the quote
@@ -40,8 +45,8 @@ async def main():
             'commodities': [{'commodityId': setupResponseAsJson['commodities'][0]['id'], 'insuredValue': 1000, 'currencyId': setupResponseAsJson['currencyId']}],
             'originFormatted': '202 Bank St, Oxford, MD 21654, USA',
             'destinationFormatted': 'Länsikatu 15, FI-80110 JOENSUU, FINLAND',
-            'startDate': '2023-02-23T03:00:00.000+03:00',
-            'endDate': '2023-02-24T03:00:00.000+03:00',
+            'startDate': '2023-05-23T03:00:00.000+03:00',
+            'endDate': '2023-05-24T03:00:00.000+03:00',
             'transportType': 1,
             'customerType': 1,
             'customerOrganization': "Redkik Inc.",
@@ -107,15 +112,21 @@ async def main():
         async with session.post(url = REDKIK_HOST + '/api/v2/quote/quotes/quote', json = data, headers = header) as quoteResponse:
             quoteResponseAsJson = await quoteResponse.json()
 
+        print('Received a quote with uuid ' + quoteResponseAsJson[0]['id'])
+
         # Purchase
         # Purchase can only be made with a valid quote offer
         async with session.post(url = REDKIK_HOST + '/api/v2/quote/bookings/purchase', data = {'offerId': quoteResponseAsJson[0]['id']}, headers = header) as purchaseResponse:
             purchaseResponseAsJson = await purchaseResponse.json()
+
+        print('Booked an insurance with uuid ' + purchaseResponseAsJson['id'] + ' and reference ' + purchaseResponseAsJson['reference'])
 
         # Cancel
         # Booking cannot be cancelled if it's under way
 
         async with session.patch(url = REDKIK_HOST + '/api/v2/quote/bookings/' + purchaseResponseAsJson['id'] + '/cancel', headers = header) as cancelResponse:
             cancelResponse = await cancelResponse.json()
+
+        print('Canceled an insurance with uuid ' + purchaseResponseAsJson['id'])
 
 asyncio.run(main())
